@@ -4,6 +4,7 @@ import TextInput from "@/Components/TextInput";
 import TableHeading from "@/Components/TableHeading";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants.jsx";
 import { Link, router } from "@inertiajs/react";
+import moment from "moment";
 
 export default function TasksTable({
   auth,
@@ -12,8 +13,8 @@ export default function TasksTable({
   queryParams = null,
   hideProjectColumn = false,
 }) {
-
   queryParams = queryParams || {};
+
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -49,6 +50,10 @@ export default function TasksTable({
       return;
     }
     router.delete(route("task.destroy", task.id));
+  };
+
+  const isPastDueDate = (dueDate) => {
+    return moment().isAfter(moment(dueDate));
   };
 
   return (
@@ -175,31 +180,34 @@ export default function TasksTable({
                 <td className="px-3 py-2 text-nowrap">{task.due_date}</td>
                 <td className="px-3 py-2">{task.createdBy.name}</td>
                 <td className="px-3 py-2 text-nowrap">
-                {[ 'Super Admin', 'Manager'].includes(auth.user.role) ? (
-                  <>
-                  <Link
-                    href={route("task.edit", task.id)}
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={(e) => deleteTask(task)}
-                    className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
-                  >
-                    Delete
-                  </button>
-                  </>
-                ) : (
-                  <>
-                  <Link
-                    href={route("submit.create", task)}
-                    className="font-medium text-green-600 dark:text-green-500 hover:underline mx-1"
-                  >
-                    Submit
-                  </Link>
-                  </>
-                )}
+                  {[ 'Super Admin', 'Manager'].includes(auth.user.role) ? (
+                    <>
+                      <Link
+                        href={route("task.edit", task.id)}
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={(e) => deleteTask(task)}
+                        className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href={route("submit.create", task)}
+                        className={`font-medium hover:underline mx-1 ${isPastDueDate(task.due_date) ? 'text-gray-500 cursor-not-allowed' : 'text-green-600 dark:text-green-500'}`}
+                        onClick={(e) => {
+                          if (isPastDueDate(task.due_date)) e.preventDefault();
+                        }}
+                      >
+                        Submit
+                      </Link>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

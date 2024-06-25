@@ -39,4 +39,17 @@ class SubmitController extends Controller
             'user' => auth()->user(),
         ]);
     }
+
+    public function show(Submit $submit)
+    {
+        return inertia("Task/Submit", [
+            'submit' => $submit,
+            'user' => auth()->user(),
+        ]);
+    }
+
+    public function index()
+    {
+        
+    }
 }

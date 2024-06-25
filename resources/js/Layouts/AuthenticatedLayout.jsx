@@ -33,12 +33,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 >
                   Dashboard
                 </NavLink>
+                {hasPermission(["Super Admin", "Manager", "employee"]) && (
+                  <>
                 <NavLink
                       href={route("project.index")}
                       active={route().current("project.index")}
                     >
                       Projects
                     </NavLink>
+                    </>
+                )}
                 {hasPermission(["Super Admin", "Manager"]) && (
                   <>
                     <NavLink
@@ -47,9 +51,13 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     >
                       All Tasks
                     </NavLink>
+                    <NavLink
+                    >
+                      Result
+                    </NavLink>
                   </>
                 )}
-                {hasPermission(["Super Admin","Manager"]) &&(
+                {hasPermission(["Super Admin"]) &&(
                 <NavLink
                       href={route("user.index")}
                       active={route().current("user.index")}
@@ -57,12 +65,16 @@ export default function AuthenticatedLayout({ user, header, children }) {
                       Users
                     </NavLink>
                 )}
+                {hasPermission(["Super Admin", "Manager", "employee"]) && (
+                  <>
                 <NavLink
                   href={route("task.myTasks")}
                   active={route().current("task.myTasks")}
                 >
                   My Tasks
                 </NavLink>
+                </>
+                )}
               </div>
             </div>
 

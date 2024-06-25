@@ -25,25 +25,5 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('admin123'),
             'email_verified_at' => time()
         ]);
-
-        User::factory()->create([
-            'id' => 2,
-            'role' => 'Manager',
-            'division' => '',
-            'name' => 'Lopez',
-            'email' => 'lopez@lopez.com',
-            'password' => bcrypt('lopez123'),
-            'email_verified_at' => time()
-        ]);
-
-        User::factory()->create([
-            'id' => 3,
-            'role' => 'Employee',
-            'division' => '',
-            'name' => 'Zura',
-            'email' => 'zura@zura.com',
-            'password' => bcrypt('zura123'),
-            'email_verified_at' => time()
-        ]);
     }
 }
